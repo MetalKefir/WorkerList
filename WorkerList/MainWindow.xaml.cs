@@ -29,12 +29,21 @@ namespace WorkerList
 
         private void Change(object sender, RoutedEventArgs e)
         {
-            Employee employee = list.SelectedItem as Employee;
-
+           
             ChangeEmployee win = new ChangeEmployee()
             {
-                DataContext = new EmployeeViewModel(ref employee)
+                DataContext = list.SelectedItem as Employee
             };
+            win.ShowDialog();
+        }
+
+        private void AddEmployees(object sender, RoutedEventArgs e)
+        {
+
+            AddEmployee win = new AddEmployee() {
+                DataContext = list.ItemsSource
+            };
+           
             win.ShowDialog();
         }
 

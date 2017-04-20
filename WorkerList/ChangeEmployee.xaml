@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="ChangeEmployee" Height="300" Width="300">
     <Grid>
-        <StackPanel  DataContext="{Binding Employee}">
+        <StackPanel>
             <TextBlock Text="Фамилия" />
             <TextBox Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock Text="Должность" />

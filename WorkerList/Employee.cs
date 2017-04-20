@@ -10,7 +10,7 @@ namespace WorkerList
         private string departnumber;
         private string position;
         private List<uint> salary;
-        private uint midlesalary;
+        private float midlesalary;
 
         public string Surname {
             get { return surname; }
@@ -48,7 +48,7 @@ namespace WorkerList
             }
             
         }
-        public uint MidleSalary
+        public float MidleSalary
         {
             get
             {
@@ -57,7 +57,7 @@ namespace WorkerList
                 foreach (var mountsalary in Salary)
                     midlesalary += mountsalary;
 
-                return midlesalary/=(uint)Salary.Count;
+                return midlesalary/= Salary.Count;
             }
             set {}
         }

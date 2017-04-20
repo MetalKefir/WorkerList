@@ -5,8 +5,50 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WorkerList"
         mc:Ignorable="d"
-        Title="AddEmployee" Height="300" Width="300">
+        Title="AddEmployee" Height="520" Width="460" MinHeight="520" MinWidth="460">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="273*" />
+            <ColumnDefinition Width="163*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Name="EmploeesData" Grid.Column="0">
+            <TextBlock Text="Фамилия" />
+            <TextBox Name="_Surname" />
+            <TextBlock Text="Должность" />
+            <TextBox  Name="_Position"/>
+            <TextBlock Text="Департамент" />
+            <TextBox  Name="_Department"/>
+
+            <Button Content="Добавить" Click="EmployeeAdd"/>
+        </StackPanel>
+
+        <StackPanel Name="_Salary" Grid.Column="1" Margin="10,10,10,10">
+            <TextBlock Text="Зарплата по месяцам" Margin="10,10,10,10"/>
+            <TextBlock Text="Январь" />
+            <TextBox Name="January"/>
+            <TextBlock Text="Февраль" />
+            <TextBox Name="February"/>
+            <TextBlock Text="Март" />
+            <TextBox Name="March"/>
+            <TextBlock Text="Апрель" />
+            <TextBox Name="April"/>
+            <TextBlock Text="Май" />
+            <TextBox Name="May"/>
+            <TextBlock Text="Июнь" />
+            <TextBox Name="June"/>
+            <TextBlock Text="Июль" />
+            <TextBox Name="Jule"/>
+            <TextBlock Text="Август" />
+            <TextBox Name="August"/>
+            <TextBlock Text="Сентябрь" />
+            <TextBox Name="September"/>
+            <TextBlock Text="Октябрь" />
+            <TextBox Name="October"/>
+            <TextBlock Text="Ноябрь" />
+            <TextBox Name="November"/>
+            <TextBlock Text="Декабрь" />
+            <TextBox Name="December"/>
+        </StackPanel>
     </Grid>
 </Window>
