@@ -60,6 +60,9 @@
     <Compile Include="ChangeEmployee.xaml.cs">
       <DependentUpon>ChangeEmployee.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Data.cs" />
+    <Compile Include="AppExeption.cs" />
+    <Compile Include="Pay.cs" />
     <Compile Include="RelayCommand.cs" />
     <Page Include="AddEmployee.xaml">
       <SubType>Designer</SubType>
@@ -73,15 +76,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="AplicationException.cs" />
     <Compile Include="AplicationViewModel.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data.cs" />
     <Compile Include="Employee.cs" />
-    <Compile Include="EmployeeViewModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

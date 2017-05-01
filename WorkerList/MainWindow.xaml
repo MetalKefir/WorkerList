@@ -7,28 +7,31 @@
         xmlns:wpf="http://schemas.microsoft.com/netfx/2007/xaml/presentation"
         xmlns:wpf1="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         mc:Ignorable="d"
-        Title="MainWindow" Height="452" Width="675" MinHeight="460" MinWidth="680">
+        Title="Главная" Height="480" Width="680" MinHeight="480" MinWidth="680">
+    
     <Grid>
         <Grid.ColumnDefinitions>
            <ColumnDefinition Width="41*" />
            <ColumnDefinition Width="25*"/>
         </Grid.ColumnDefinitions>
         
-        <ListView Name="list" Grid.Column="0" MinHeight="400" MinWidth="410" ItemsSource="{Binding Employees}" SelectedItem="{Binding SelectedEmployee}">
+        <ListView  Name="list" Grid.Column="0" MinHeight="400" MinWidth="410" ItemsSource="{Binding Employees}" SelectedItem="{Binding SelectedEmployee}" SelectionMode="Single">
             <ListView.View>
                 <GridView>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Surname}" Width="100">Фамилия</GridViewColumn>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Position}" Width="100">Должность</GridViewColumn>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=DepartNumber}" Width="100">Отдел</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=MidleSalary}" Width="100">Зарплата</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=MidleSalary, StringFormat={}{0:F} руб.}" Width="100">Зарплата</GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
 
-        <StackPanel Grid.Column="1" MinHeight="380" MinWidth="250" Margin="0,0,-10,0">
-            <Button Margin="47,50,47,50" Content="Добавить" Height="25" Width="100" Click="AddEmployees"/>
-            <Button Margin="47,50,47,50" Content="Удалить" Height="25" Width="100"/>
-            <Button Margin="47,50,47,50" Content="Изменить" Height="25" Width="100" Click="Change"/>
+        <StackPanel Grid.Column="1" MinHeight="380" MinWidth="250">
+            <Button Margin="47,40,47,50" Content="Добавить" Height="25" Width="100" Click="AddEmployees"/>
+            <Button Margin="47,10,47,50" Content="Изменить" Height="25" Width="100" Click="ChangeEmployee"/>
+            <Button Margin="47,10,47,50" Content="Удалить" Height="25" Width="100" Command="{Binding RemoveCommand}"/>
+            <Button Margin="47,10,47,50" Content="Считать из файла" Height="25" Width="100" Click="ReadFile"/>
+            <Button Margin="47,10,47,50" Content="Записать в файл" Height="25" Width="100" Click="RecordFile"/>
         </StackPanel>
     </Grid>
 </Window>

@@ -15,6 +15,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
+
 namespace WorkerList
 {
     /// <summary>
@@ -22,30 +23,39 @@ namespace WorkerList
     /// </summary>
     public partial class AddEmployee : Window
     {
+        private uint counterror = 0;
+        private Employee addedemployee;
         public AddEmployee()
         {
+            DataContext = addedemployee = new Employee() { Surname = "", Position = "", DepartNumber = null };
             InitializeComponent();
+
         }
 
         private void EmployeeAdd(object sender, RoutedEventArgs e)
         {
-            List<uint> _Salary = new List<uint>();
-            IEnumerable<uint> salary;
-            _Salary.Add(Convert.ToUInt32(January.Text));
-            _Salary.Add(Convert.ToUInt32(February.Text));
-            _Salary.Add(Convert.ToUInt32(March.Text));
-            _Salary.Add(Convert.ToUInt32(April.Text));
-            _Salary.Add(Convert.ToUInt32(May.Text));
-            _Salary.Add(Convert.ToUInt32(June.Text));
-            _Salary.Add(Convert.ToUInt32(Jule.Text));
-            _Salary.Add(Convert.ToUInt32(August.Text));
-            _Salary.Add(Convert.ToUInt32(September.Text));
-            _Salary.Add(Convert.ToUInt32(October.Text));
-            _Salary.Add(Convert.ToUInt32(November.Text));
-            _Salary.Add(Convert.ToUInt32(December.Text));
+            (Owner.DataContext as AplicationViewModel).Employees.Add(addedemployee);
+            MessageBox.Show("Сотрудник успешно добавлен");
+            Close();
+        }
 
-            Employee newemployee = new Employee() {Surname = _Surname.Text, DepartNumber=_Department.Text, Position=_Position.Text, Salary=_Salary};
-            (DataContext as ObservableCollection<Employee>).Add(newemployee);
+        private void SalaryDataError(object sender, ValidationErrorEventArgs e)
+        {
+            if (ButtonOK.IsEnabled || (sender as TextBox).ToolTip != null || counterror != 1)
+            {
+                ButtonOK.IsEnabled = false;
+
+                if ((sender as TextBox).ToolTip != null)
+                    counterror++;
+                else counterror--;
+            }
+            else ButtonOK.IsEnabled = true;
+        }
+
+        private void Cancle_Click(object sender, RoutedEventArgs e)
+        {
+            addedemployee = null;
+            Close();
         }
     }
 }

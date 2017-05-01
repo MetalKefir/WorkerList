@@ -5,15 +5,77 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WorkerList"
         mc:Ignorable="d"
-        Title="ChangeEmployee" Height="300" Width="300">
+        Closed="Window_Closed"
+        Loaded="Window_Loaded"
+        Title="Редактирование Данных" Height="540" Width="488" MinHeight="540" MinWidth="460">
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip"
+                            Value="{Binding RelativeSource={RelativeSource Self},
+                            Path=(Validation.Errors)[0].ErrorContent}" />
+
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
     <Grid>
-        <StackPanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="301*" />
+            <ColumnDefinition Width="179*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Name="EmploeesData" Grid.Column="0">
             <TextBlock Text="Фамилия" />
-            <TextBox Text="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Name="Surname" Text="{Binding Surname, ValidatesOnDataErrors=True}"/>
+
             <TextBlock Text="Должность" />
-            <TextBox Text="{Binding Position, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Name="Position" Text="{Binding Position, ValidatesOnDataErrors=True}"/>
+
             <TextBlock Text="Департамент" />
-            <TextBox Text="{Binding DepartNumber, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Name="DepartNumber" Text="{Binding DepartNumber, ValidatesOnDataErrors=True}"/>
+            
         </StackPanel>
+        
+        <StackPanel Margin="0,234,0,209" Orientation="Vertical">
+
+            <Button x:Name="ButtonOK" Click="ChangeEmployeeOK" Height="21" Content="Потвердить">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+
+                        <Style.Triggers>
+
+                            <DataTrigger Binding="{Binding (Validation.HasError), ElementName=Surname}" Value="True">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding (Validation.HasError), ElementName=Position}" Value="True">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding (Validation.HasError), ElementName=DepartNumber}" Value="True">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button x:Name="Cancle" Click="CancleWin" Height="21" Content="Отмена"/>
+
+        </StackPanel>
+
+        <ListBox Grid.Column="1" ItemsSource="{Binding Salary}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Path=Month}" />
+                        <TextBox   Text="{Binding Path=Salary, NotifyOnValidationError=True, ValidatesOnDataErrors=True}" Validation.Error="SalaryDataError" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </Window>

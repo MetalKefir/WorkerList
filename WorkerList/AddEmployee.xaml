@@ -5,8 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WorkerList"
         mc:Ignorable="d"
-        Title="AddEmployee" Height="520" Width="460" MinHeight="520" MinWidth="460">
+        Title="Добавление Сотрудника" Height="540" Width="488" MinHeight="540" MinWidth="460">
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip"
+                Value="{Binding RelativeSource={RelativeSource Self},
+                    Path=(Validation.Errors)[0].ErrorContent}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    
     <Grid>
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="273*" />
             <ColumnDefinition Width="163*"/>
@@ -14,41 +27,64 @@
 
         <StackPanel Name="EmploeesData" Grid.Column="0">
             <TextBlock Text="Фамилия" />
-            <TextBox Name="_Surname" />
+            <TextBox Name="Surname" Text="{Binding Surname, ValidatesOnDataErrors=True}"/>
+
             <TextBlock Text="Должность" />
-            <TextBox  Name="_Position"/>
+            <TextBox  Name="Position" Text="{Binding Position, ValidatesOnDataErrors=True}"/>
+
             <TextBlock Text="Департамент" />
-            <TextBox  Name="_Department"/>
-
-            <Button Content="Добавить" Click="EmployeeAdd"/>
+            <TextBox  Name="DepartNumber" Text="{Binding DepartNumber, ValidatesOnDataErrors=True}"/>
         </StackPanel>
 
-        <StackPanel Name="_Salary" Grid.Column="1" Margin="10,10,10,10">
-            <TextBlock Text="Зарплата по месяцам" Margin="10,10,10,10"/>
-            <TextBlock Text="Январь" />
-            <TextBox Name="January"/>
-            <TextBlock Text="Февраль" />
-            <TextBox Name="February"/>
-            <TextBlock Text="Март" />
-            <TextBox Name="March"/>
-            <TextBlock Text="Апрель" />
-            <TextBox Name="April"/>
-            <TextBlock Text="Май" />
-            <TextBox Name="May"/>
-            <TextBlock Text="Июнь" />
-            <TextBox Name="June"/>
-            <TextBlock Text="Июль" />
-            <TextBox Name="Jule"/>
-            <TextBlock Text="Август" />
-            <TextBox Name="August"/>
-            <TextBlock Text="Сентябрь" />
-            <TextBox Name="September"/>
-            <TextBlock Text="Октябрь" />
-            <TextBox Name="October"/>
-            <TextBlock Text="Ноябрь" />
-            <TextBox Name="November"/>
-            <TextBlock Text="Декабрь" />
-            <TextBox Name="December"/>
+        <StackPanel Margin="0,234,0,209" Orientation="Vertical">
+
+            <Button x:Name="ButtonOK" Click="EmployeeAdd" Height="21" Content="Добавить">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+
+                        <Style.Triggers>
+
+                            <DataTrigger Binding="{Binding (Validation.HasError), ElementName=Surname}" Value="True">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding (Validation.HasError), ElementName=Position}" Value="True">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding (Validation.HasError), ElementName=DepartNumber}" Value="True">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding Path=Text.Length, ElementName=Surname}">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding Path=Text.Length, ElementName=Position}">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding Path=Text.Length, ElementName=DepartNumber}">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button x:Name="Cancle" Click="Cancle_Click" Height="21" Content="Отмена"/>
+
         </StackPanel>
+
+        <ListBox Grid.Column="1" ItemsSource="{Binding Salary}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Path=Month}" />
+                        <TextBox   Text="{Binding Path=Salary, NotifyOnValidationError=True, ValidatesOnDataErrors=True}" Validation.Error="SalaryDataError" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
     </Grid>
 </Window>
