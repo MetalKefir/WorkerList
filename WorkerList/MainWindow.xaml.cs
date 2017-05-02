@@ -32,6 +32,25 @@ namespace WorkerList
             list.Items.SortDescriptions.Add(new SortDescription("Surname", ListSortDirection.Ascending));
         }
 
+        private void DataValidation(ref string[] data)
+        {
+            if (data.Length < 15)
+                throw new DataExeption("В строке файла не хватает данных");
+
+            if (Regex.Match(data[0], @"[^A-Za-zА-яа-я$]").Success)
+                throw new DataExeption("Фамилия сотрудника заданна некоректно");
+
+            if (Regex.Match(data[14], @"[^A-Za-zА-яа-я$]").Success)
+                throw new DataExeption("Должность сотрудника заданна некоректно");
+
+            if (Regex.Match(data[1], @"[^0-9]").Success)
+                throw new DataExeption("Номер отдела задан некоректно");
+
+            for (short i = 2; i < 14; i++)
+                if (!Regex.Match(data[i], @"^[0-9]*[.,]?[0-9]+$").Success)
+                    throw new DataExeption("Зарплата задана некоректно");
+        }
+
         private string[] DividData(string[] dataarray)
         {
             StringBuilder cleardata = new StringBuilder();
@@ -43,21 +62,7 @@ namespace WorkerList
             }
             var finishdata = cleardata.Remove(cleardata.Length - 1, 1).ToString().Split(' ');
 
-            if (finishdata.Length < 15)
-                throw new DataExeption("В строке файла не хватает данных");
-
-            if (Regex.Match(finishdata[0], @"[^A-Za-zА-яа-я$]").Success)
-                throw new DataExeption("Фамилия сотрудника заданна некоректно");
-
-            if (Regex.Match(finishdata[14], @"[^A-Za-zА-яа-я$]").Success)
-                throw new DataExeption("Должность сотрудника заданна некоректно");
-
-            if (Regex.Match(finishdata[1], @"[^0-9]").Success)
-                throw new DataExeption("Номер отдела задан некоректно");
-
-            for (short i = 2; i < 14; i++)
-                if (!Regex.Match(finishdata[i], @"^[0-9]*[.,]?[0-9]+$").Success)
-                    throw new DataExeption("Зарплата задана некоректно");
+            DataValidation(ref finishdata);
 
             return finishdata;
         }
