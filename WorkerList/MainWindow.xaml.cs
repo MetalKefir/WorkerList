@@ -32,6 +32,10 @@ namespace WorkerList
             list.Items.SortDescriptions.Add(new SortDescription("Surname", ListSortDirection.Ascending));
         }
 
+        /// <summary>
+        /// Проверка данных в строке из файла
+        /// </summary>
+        /// <param name="data">массив записей в строке файла</param>
         private void DataValidation(ref string[] data)
         {
             if (data.Length < 15)
@@ -51,6 +55,11 @@ namespace WorkerList
                     throw new DataExeption("Зарплата задана некоректно");
         }
 
+        /// <summary>
+        /// Приведение строки к нужному формату
+        /// </summary>
+        /// <param name="dataarray">строка изъята из файла</param>
+        /// <returns>строка соотвествующая требованиям</returns>
         private string[] DividData(string[] dataarray)
         {
             StringBuilder cleardata = new StringBuilder();
@@ -67,12 +76,19 @@ namespace WorkerList
             return finishdata;
         }
 
-        private string[] FileRecord()
+        /// <summary>
+        /// Получение всех строк из файла
+        /// </summary>
+        /// <returns>массив строк из файла</returns>
+        private string[] FileRecords()
         {
             var filePath = Data.GetFile();
             return File.ReadAllLines(filePath);
         }
 
+        /// <summary>
+        /// Чтение из файла
+        /// </summary>
         private void ReadFile(object sender, RoutedEventArgs e)
         {
             try
@@ -80,7 +96,7 @@ namespace WorkerList
                 if ((DataContext as AplicationViewModel).Employees == null)
                     throw new DataExeption("Список сотрудников не найден");
 
-                var filedata = FileRecord();
+                var filedata = FileRecords();
 
                 foreach (var record in filedata)
                 {
@@ -110,6 +126,9 @@ namespace WorkerList
             list.Items.SortDescriptions.Add(new SortDescription("Surname", ListSortDirection.Ascending));
         }
 
+        /// <summary>
+        /// Запись в файл
+        /// </summary>
         private void RecordFile(object sender, RoutedEventArgs e)
         {
             Func<ObservableCollection<Pay>, string> ConvertSalary =
@@ -148,6 +167,9 @@ namespace WorkerList
             }
         }
 
+        /// <summary>
+        /// Изменение данных о сотруднике
+        /// </summary>
         private void ChangeEmployee(object sender, RoutedEventArgs e)
         {
             try
@@ -175,6 +197,9 @@ namespace WorkerList
 
         }
 
+        /// <summary>
+        /// Добавление сотрудника
+        /// </summary>
         private void AddEmployees(object sender, RoutedEventArgs e)
         {
             try
@@ -197,10 +222,19 @@ namespace WorkerList
             list.Items.SortDescriptions.Add(new SortDescription("Surname", ListSortDirection.Ascending));
         }
 
+        /// <summary>
+        /// Выход из приложения
+        /// </summary>
         private void Exit(object sender, RoutedEventArgs e) => OnClosed(e);
 
+        /// <summary>
+        /// Событие закрытия окна
+        /// </summary>
         private void WindowClosed(object sender, EventArgs e) => Close();
 
+        /// <summary>
+        /// Событие до закрытия окна
+        /// </summary>
         private void WindowClosing(object sender, CancelEventArgs e)
         {
             if (MessageBox.Show("Вы увернены, что хотите выйти из программы?\n Все не сохраненые данные будут потеряны.", "Выход", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
@@ -210,6 +244,9 @@ namespace WorkerList
             else DataContext = null;
         }
 
+        /// <summary>
+        /// Удаление записи о сторуднике
+        /// </summary>
         private void Deleting(object sender, RoutedEventArgs e)
         {
             try
