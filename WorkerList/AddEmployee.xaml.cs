@@ -25,6 +25,7 @@ namespace WorkerList
     {
         private uint counterror = 0;
         private Employee addedemployee;
+        private bool cancletrig=true;
         public AddEmployee()
         {
             DataContext = addedemployee = new Employee() { Surname = "", Position = "", DepartNumber = null };
@@ -35,7 +36,8 @@ namespace WorkerList
         private void EmployeeAdd(object sender, RoutedEventArgs e)
         {
             (Owner.DataContext as AplicationViewModel).Employees.Add(addedemployee);
-            MessageBox.Show("Сотрудник успешно добавлен");
+            MessageBox.Show("Сотрудник успешно добавлен","Успех",MessageBoxButton.OK,MessageBoxImage.Information);
+            cancletrig = false;
             Close();
         }
 
@@ -52,10 +54,16 @@ namespace WorkerList
             else ButtonOK.IsEnabled = true;
         }
 
-        private void Cancle_Click(object sender, RoutedEventArgs e)
+        private void CancleClick(object sender, RoutedEventArgs e) => OnClosed(e);
+
+        private void WindowClosed(object sender, EventArgs e) => Close();
+
+        private void WindowClosing(object sender, CancelEventArgs e)
         {
-            addedemployee = null;
-            Close();
+            if (cancletrig)
+                if (MessageBox.Show("Вы увернены, что хотите отменить добаление?", "Отмена", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
+                    e.Cancel = true;
+                else DataContext = addedemployee = null;  
         }
     }
 }

@@ -7,6 +7,8 @@
         xmlns:wpf="http://schemas.microsoft.com/netfx/2007/xaml/presentation"
         xmlns:wpf1="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         mc:Ignorable="d"
+        Closing="WindowClosing"
+        Closed="WindowClosed"
         Title="Главная" Height="480" Width="680" MinHeight="480" MinWidth="680">
     
     <Grid>
@@ -29,9 +31,10 @@
         <StackPanel Grid.Column="1" MinHeight="380" MinWidth="250">
             <Button Margin="47,40,47,50" Content="Добавить" Height="25" Width="100" Click="AddEmployees"/>
             <Button Margin="47,10,47,50" Content="Изменить" Height="25" Width="100" Click="ChangeEmployee"/>
-            <Button Margin="47,10,47,50" Content="Удалить" Height="25" Width="100" Command="{Binding RemoveCommand}"/>
+            <Button Margin="47,10,47,50" Name="Delete" Content="Удалить" Height="25" Width="100" Command="{Binding RemoveCommand}" Click="Deleting"/>
             <Button Margin="47,10,47,50" Content="Считать из файла" Height="25" Width="100" Click="ReadFile"/>
             <Button Margin="47,10,47,50" Content="Записать в файл" Height="25" Width="100" Click="RecordFile"/>
+            <Button Margin="47,10,47,50" Content="Выйти" Height="25" Width="100" Click="Exit"/>
         </StackPanel>
     </Grid>
 </Window>

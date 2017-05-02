@@ -30,13 +30,27 @@ namespace WorkerList
                 return removeCommand ??
                     (removeCommand = new RelayCommand(obj =>
                     {
-                        if (selectedEmployee != null) 
-                          Employees.Remove(selectedEmployee);                      
+                        if (selectedEmployee != null)
+                            Employees.Remove(selectedEmployee);
+                        else throw new DataExeption("Ошибка удаления");
                     },
                     (obj) => Employees.Count > 0 && selectedEmployee!=null));
             }
         }
 
+        private RelayCommand readfileCommand;
+        public RelayCommand ReadFileCommand
+        {
+            get
+            {
+                return removeCommand ??
+                    (removeCommand = new RelayCommand(obj =>
+                    {
+
+                        
+                    }));
+            }
+        }
 
         public AplicationViewModel()
         {

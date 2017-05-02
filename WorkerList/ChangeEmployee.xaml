@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WorkerList"
         mc:Ignorable="d"
-        Closed="Window_Closed"
-        Loaded="Window_Loaded"
-        Title="Редактирование Данных" Height="540" Width="488" MinHeight="540" MinWidth="460">
+        Closed="WindowClosed"
+        Closing="WindowClosing"
+        Loaded="WindowLoaded"
+        Title="Редактирование" Height="540" Width="488" MinHeight="540" MinWidth="460">
     <Window.Resources>
         <Style TargetType="TextBox">
             <Style.Triggers>
@@ -63,7 +64,7 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <Button x:Name="Cancle" Click="CancleWin" Height="21" Content="Отмена"/>
+            <Button x:Name="Cancle" Click="CancleClick" Height="21" Content="Отмена"/>
 
         </StackPanel>
 

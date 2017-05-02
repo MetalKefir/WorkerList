@@ -32,64 +32,71 @@ namespace WorkerList
             list.Items.SortDescriptions.Add(new SortDescription("Surname", ListSortDirection.Ascending));
         }
 
+        private string[] DividData(string[] dataarray)
+        {
+            StringBuilder cleardata = new StringBuilder();
+
+            for (short i = 0; i < dataarray.Length; i++)
+            {
+                if (dataarray[i] != "")
+                    cleardata.Append(dataarray[i] + " ");
+            }
+            var finishdata = cleardata.Remove(cleardata.Length - 1, 1).ToString().Split(' ');
+
+            if (finishdata.Length < 15)
+                throw new DataExeption("В строке файла не хватает данных");
+
+            if (Regex.Match(finishdata[0], @"[^A-Za-zА-яа-я$]").Success)
+                throw new DataExeption("Фамилия сотрудника заданна некоректно");
+
+            if (Regex.Match(finishdata[14], @"[^A-Za-zА-яа-я$]").Success)
+                throw new DataExeption("Должность сотрудника заданна некоректно");
+
+            if (Regex.Match(finishdata[1], @"[^0-9]").Success)
+                throw new DataExeption("Номер отдела задан некоректно");
+
+            for (short i = 2; i < 14; i++)
+                if (!Regex.Match(finishdata[i], @"^[0-9]*[.,]?[0-9]+$").Success)
+                    throw new DataExeption("Зарплата задана некоректно");
+
+            return finishdata;
+        }
+
+        private string[] FileRecord()
+        {
+            var filePath = Data.GetFile();
+            return File.ReadAllLines(filePath);
+        }
+
         private void ReadFile(object sender, RoutedEventArgs e)
         {
-            string filePath;
-
             try
             {
-                filePath = Data.GetFile();
+                var filedata = FileRecord();
+
+                foreach (var record in filedata)
+                {
+                    var finishdata = DividData(record.Split(' '));
+
+                    Employee employee = new Employee()
+                    {
+                        Surname = finishdata[0],
+                        DepartNumber = Convert.ToUInt16(finishdata[1]),
+                        Position = finishdata[14]
+                    };
+
+                    for (short i = 2; i < finishdata.Length - 1; i++)
+                        employee.Salary[i - 2].Salary = (float)Convert.ToDouble(finishdata[i]);
+
+                    if (!(DataContext as AplicationViewModel).Employees.Contains(employee))
+                        (DataContext as AplicationViewModel).Employees.Add(employee);
+
+                }
             }
             catch (DataExeption exeption)
             {
-                MessageBox.Show(exeption.Message);
+                MessageBox.Show(exeption.Message, "Ошибка",MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
-            }
-
-            var data = File.ReadAllLines(filePath);
-
-            foreach (var workdata in data)
-            {
-
-                var divdata = workdata.Split(' ');
-
-                try
-                {
-                    if (divdata.Length < 14)
-                        throw new DataExeption("В строке файла не хватает данных");
-                    
-                    if(Regex.Match(divdata[0], @"[^A-Za-zА-яа-я$]").Success || divdata[0]==" ")
-                       throw new DataExeption("Фамилия сотрудника заданна некоректно");
-
-                    if (Regex.Match(divdata[14], @"[^A-Za-zА-яа-я$]").Success || divdata[14] == " ")
-                        throw new DataExeption("Должность сотрудника заданна некоректно");
-
-                    if (Regex.Match(divdata[1], @"[^0-9]").Success || divdata[1] == " ")
-                        throw new DataExeption("Номер отдела задан некоректно");
-
-                    for (short i = 2; i < 14; i++)
-                        if (!Regex.Match(divdata[i], @"^[0-9]*[.,]?[0-9]+$").Success || divdata[1] == " ")
-                            throw new DataExeption("Зарплата задана некоректно");
-                }
-                catch (DataExeption exeption)
-                {
-                    MessageBox.Show(exeption.Message);
-                    return;
-                }
-
-                Employee employee = new Employee()
-                {
-                    Surname = divdata[0],
-                    DepartNumber = Convert.ToUInt16(divdata[1]),
-                    Position = divdata[14]
-                };
-
-                for (short i = 2; i < 14; i++)
-                    employee.Salary[i - 2].Salary =(float)Convert.ToDouble(divdata[i]);
-
-                if (!(DataContext as AplicationViewModel).Employees.Contains(employee))
-                    (DataContext as AplicationViewModel).Employees.Add(employee);
- 
             }
 
             list.Items.SortDescriptions.Add(new SortDescription("Surname", ListSortDirection.Ascending));
@@ -114,11 +121,11 @@ namespace WorkerList
 
             try
             {
-                filePath = Data.GetFile();
+                filePath = Data.GetSaveFile();
             }
             catch(DataExeption exeption)
             {
-                MessageBox.Show(exeption.Message);
+                MessageBox.Show(exeption.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -136,11 +143,11 @@ namespace WorkerList
             try
             {
                 if (list.SelectedItem == null)
-                    throw new Exception("выберите элемент");
+                    throw new Exception("элемент не выбран\nВыбирете один элемент из списка.");
             }
             catch (Exception exp)
             {
-                MessageBox.Show(exp.Message);
+                MessageBox.Show(exp.Message,"Ошибка",MessageBoxButton.OK, MessageBoxImage.Question);
                 return;
             }
            
@@ -152,6 +159,7 @@ namespace WorkerList
             win.ShowDialog();
 
             list.Items.SortDescriptions.Add(new SortDescription("Surname", ListSortDirection.Ascending));
+
         }
 
         private void AddEmployees(object sender, RoutedEventArgs e)
@@ -165,5 +173,30 @@ namespace WorkerList
             list.Items.SortDescriptions.Add(new SortDescription("Surname", ListSortDirection.Ascending));
         }
 
+        private void Exit(object sender, RoutedEventArgs e) => OnClosed(e);
+
+        private void WindowClosed(object sender, EventArgs e) => Close();
+
+        private void WindowClosing(object sender, CancelEventArgs e)
+        {
+            if (MessageBox.Show("Вы увернены, что хотите выйти из программы?\n Все не сохраненые данные будут потеряны.", "Выход", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
+            {
+                e.Cancel = true;
+            }
+            else DataContext = null;
+        }
+
+        private void Deleting(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (Delete.Command.CanExecute(list.SelectedItem))
+                    Delete.Command.Execute(list.SelectedItem);
+            }
+            catch(DataExeption exeption)
+            {
+                MessageBox.Show(exeption.Message,"Ошибка",MessageBoxButton.OK,MessageBoxImage.Error);
+            }
+        }
     }
 }
