@@ -2,7 +2,10 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
-
+using System.IO;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
 
 namespace WorkerList
 {
@@ -34,21 +37,7 @@ namespace WorkerList
                             Employees.Remove(selectedEmployee);
                         else throw new DataExeption("Ошибка удаления");
                     },
-                    (obj) => Employees.Count > 0 && selectedEmployee!=null));
-            }
-        }
-
-        private RelayCommand readfileCommand;
-        public RelayCommand ReadFileCommand
-        {
-            get
-            {
-                return removeCommand ??
-                    (removeCommand = new RelayCommand(obj =>
-                    {
-
-                        
-                    }));
+                    (obj) => Employees!=null && Employees.Count > 0 && selectedEmployee!=null));
             }
         }
 
@@ -57,8 +46,8 @@ namespace WorkerList
             Employees = new ObservableCollection<Employee>()
             {
                 new Employee{Surname = "Морозов", Position = "кодер", DepartNumber = 1},
-                //new Employee{Surname = "Карпунин", Position = "кодер", DepartNumber = 1 },
-                //new Employee{Surname = "Гатилов", Position = "кодер", DepartNumber = 1 }
+                new Employee{Surname = "Карпунин", Position = "кодер", DepartNumber = 1 },
+                new Employee{Surname = "Гатилов", Position = "кодер", DepartNumber = 1 }
             };
 
         }

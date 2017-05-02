@@ -72,6 +72,9 @@ namespace WorkerList
         {
             try
             {
+                if ((DataContext as AplicationViewModel).Employees == null)
+                    throw new DataExeption("Список сотрудников не найден");
+
                 var filedata = FileRecord();
 
                 foreach (var record in filedata)
@@ -95,7 +98,7 @@ namespace WorkerList
             }
             catch (DataExeption exeption)
             {
-                MessageBox.Show(exeption.Message, "Ошибка",MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(exeption.Message,"Ошибка",MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -121,6 +124,8 @@ namespace WorkerList
 
             try
             {
+                if ((DataContext as AplicationViewModel).Employees == null)
+                    throw new DataExeption("Список сотрудников не найден");
                 filePath = Data.GetSaveFile();
             }
             catch(DataExeption exeption)
@@ -142,20 +147,23 @@ namespace WorkerList
         {
             try
             {
+                if ((DataContext as AplicationViewModel).Employees == null)
+                    throw new DataExeption("Список сотрудников не найден");
                 if (list.SelectedItem == null)
                     throw new Exception("элемент не выбран\nВыбирете один элемент из списка.");
             }
             catch (Exception exp)
             {
-                MessageBox.Show(exp.Message,"Ошибка",MessageBoxButton.OK, MessageBoxImage.Question);
+                MessageBox.Show(exp.Message,"Ошибка",MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
            
             ChangeEmployee win = new ChangeEmployee()
             {
-                DataContext = (list.SelectedItem as Employee)
+                DataContext = (list.SelectedItem as Employee),
+                Owner = this
             };
-            win.Owner = this;
+           
             win.ShowDialog();
 
             list.Items.SortDescriptions.Add(new SortDescription("Surname", ListSortDirection.Ascending));
@@ -164,10 +172,21 @@ namespace WorkerList
 
         private void AddEmployees(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                if ((DataContext as AplicationViewModel).Employees == null)
+                    throw new DataExeption("Список сотрудников не найден");
+            }
+            catch (DataExeption exeption)
+            {
+                MessageBox.Show(exeption.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            AddEmployee win = new AddEmployee()
+            {
+                Owner = this
+            };
 
-            AddEmployee win = new AddEmployee();
-
-            win.Owner = this;
             win.ShowDialog();
 
             list.Items.SortDescriptions.Add(new SortDescription("Surname", ListSortDirection.Ascending));
